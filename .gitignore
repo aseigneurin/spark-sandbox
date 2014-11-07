@@ -2,3 +2,5 @@
 .settings/
 .classpath
 .project
+
+data/wikipedia-pagecounts/
