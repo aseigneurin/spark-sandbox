@@ -2,6 +2,7 @@ package com.seigneurin.spark;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.function.Function;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -17,7 +18,7 @@ public class WikipediaMapReduceByKey {
                 .setMaster("local[16]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        JavaPairRDD<String, Long> rdd = sc.textFile("data/wikipedia-pagecounts-hours/pagecounts-20141101-*")
+        JavaPairRDD<String, Long> rdd = sc.textFile("data/wikipedia-pagecounts/pagecounts-20141101-*")
                 .map(line -> line.split(" "))
                 .mapToPair(s -> new Tuple2<String, Long>(s[0], Long.parseLong(s[2])))
                 .reduceByKey((x, y) -> x + y)
@@ -38,6 +39,13 @@ public class WikipediaMapReduceByKey {
         //        rdd
         //                .sortByKey(Comparator.comparing(String::toLowerCase))
         //                .foreach(t -> System.out.println(t._1 + " -> " + t._2));
+
+        // tri lower-case avec un cast (merci Fabien Arrault !)
+        Function<String, String> f = (Function<String, String> & Serializable) String::toLowerCase;
+        Comparator<String> c = (Comparator<String> & Serializable) Comparator.comparing(f);
+        rdd
+                .sortByKey(c)
+                .foreach(t -> System.out.println(t._1 + " -> " + t._2));
 
         // tri lower-case
         rdd
