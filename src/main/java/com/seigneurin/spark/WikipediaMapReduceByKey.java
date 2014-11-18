@@ -42,9 +42,8 @@ public class WikipediaMapReduceByKey {
 
         // tri lower-case avec un cast (merci Fabien Arrault !)
         Function<String, String> f = (Function<String, String> & Serializable) String::toLowerCase;
-        Comparator<String> c = (Comparator<String> & Serializable) Comparator.comparing(f);
         rdd
-                .sortByKey(c)
+                .sortByKey(Comparator.comparing(f))
                 .foreach(t -> System.out.println(t._1 + " -> " + t._2));
 
         // tri lower-case
