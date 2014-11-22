@@ -13,8 +13,6 @@ import twitter4j.auth.AuthorizationFactory;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationContext;
 
-import com.cybozu.labs.langdetect.DetectorFactory;
-import com.cybozu.labs.langdetect.LangDetectException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seigneurin.spark.pojo.Tweet;
 
@@ -37,7 +35,9 @@ public class AnalyseTweetsAndroid {
         // - ajouter une dépendance de spark-sandbox vers language-detection
         // - décommenter ce code et le code dans detectLanguage()
         // - ajuster le chemin ci-dessus
+        /*
         DetectorFactory.loadProfile("/Users/aseigneurin/dev/language-detection/profiles");
+        */
 
         // Spark
         SparkConf sparkConf = new SparkConf()
@@ -66,7 +66,7 @@ public class AnalyseTweetsAndroid {
         sc.awaitTermination();
     }
 
-    private static String detectLanguage(String text) throws LangDetectException {
+    private static String detectLanguage(String text) throws Exception {
         /*
         Detector detector = DetectorFactory.create();
         detector.append(text);
