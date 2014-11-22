@@ -80,6 +80,30 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch-spark_2.10</artifactId>
+            <version>2.1.0.Beta3</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spark-sql_2.10</artifactId>
+                    <groupId>org.apache.spark</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.optimaize.languagedetector</groupId>
+            <artifactId>language-detector</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 
 </project>
