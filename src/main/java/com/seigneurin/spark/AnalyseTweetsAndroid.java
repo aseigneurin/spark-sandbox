@@ -45,19 +45,14 @@ public class AnalyseTweetsAndroid {
                 .setMaster("local[2]")
                 .set("spark.serializer", KryoSerializer.class.getName())
                 .set("es.nodes", "localhost:9200")
-                .set("es.index.auto.create", "true")
-                .set("es.mapping.timestamp", "createdAt");
+                .set("es.index.auto.create", "true");
         JavaStreamingContext sc = new JavaStreamingContext(sparkConf, new Duration(5000));
 
         String[] filters = { "#Android" };
         TwitterUtils.createStream(sc, twitterAuth, filters)
-                .foreachRDD(rdd -> {
-                    JavaRDD<String> tweets = rdd
-                            .map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(),
-                                    detectLanguage(s.getText())))
-                            .map(t -> mapper.writeValueAsString(t));
-                    tweets
-                            .foreach(s -> System.out.println(s));
+                .map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(), detectLanguage(s.getText())))
+                .map(t -> mapper.writeValueAsString(t))
+                .foreachRDD(tweets -> {
                     JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
                     return null;
                 });
