@@ -16,7 +16,7 @@ import twitter4j.conf.ConfigurationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seigneurin.spark.pojo.Tweet;
 
-public class AnalyseTweetsAndroid {
+public class IndexTweets {
 
     public static void main(String[] args) throws Exception {
 
@@ -53,6 +53,10 @@ public class AnalyseTweetsAndroid {
                 .map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(), detectLanguage(s.getText())))
                 .map(t -> mapper.writeValueAsString(t))
                 .foreachRDD(tweets -> {
+                    // https://issues.apache.org/jira/browse/SPARK-4560
+                    //tweets.foreach(t -> System.out.println(t));
+
+                    tweets.collect().stream().forEach(t -> System.out.println(t));
                     JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
                     return null;
                 });
