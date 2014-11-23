@@ -36,6 +36,7 @@ public class Tweet {
         this.text = text;
     }
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     public Date getCreatedAt() {
         return createdAt;
     }
