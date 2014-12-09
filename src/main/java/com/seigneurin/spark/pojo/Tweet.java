@@ -2,6 +2,8 @@ package com.seigneurin.spark.pojo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Tweet {
 
     private String user;
